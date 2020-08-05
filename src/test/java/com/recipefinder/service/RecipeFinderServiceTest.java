@@ -59,9 +59,6 @@ class RecipeFinderServiceTest {
         catch (IllegalArgumentException e){
             Assertions.assertThat(e.getMessage()).isEqualTo("Invalid username or password!");
         }
-
-
-
     }
 
 }
