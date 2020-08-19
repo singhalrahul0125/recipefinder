@@ -5,7 +5,7 @@ public class RecipeResult {
     private String sourceUrl;
     private Integer readyInMinutes;
 
-    public RecipeResult(){
+    public RecipeResult() {
 
     }
 

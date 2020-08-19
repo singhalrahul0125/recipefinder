@@ -22,28 +22,29 @@ public class RecipeFinderController {
     private RecipeFinderService recipeFinderService;
 
     @GetMapping("/find")
-    public List<RecipeResult> findRecipe(@RequestParam String recipeName ){
+    public List<RecipeResult> findRecipe(@RequestParam String recipeName) {
         return recipeFinderService.findRecipe(recipeName);
     }
 
     @PostMapping("/account")
-    public String createUserAccount(@RequestBody Map<String, String> request){
+    public String createUserAccount(@RequestBody Map<String, String> request) {
         return recipeFinderService.createUserAccount(request.get("username"), request.get("password"));
     }
 
     @PostMapping("/myrecipes")
-    public void saveRecipes(String apiKey, @RequestBody UserRecipe userRecipe){
-        recipeFinderService.saveRecipes(apiKey, userRecipe.getRecipeName(), userRecipe.getRecipeUrl(), userRecipe.getRating());
+    public String saveRecipes(String apiKey, @RequestBody UserRecipe userRecipe) {
+        return recipeFinderService.saveRecipes(apiKey, userRecipe.getRecipeName(), userRecipe.getRecipeUrl(),
+                userRecipe.getRating());
     }
 
     @GetMapping("/myrecipes")
-    public List<UserRecipe> getUserRecipe(String apiKey){
-     return  recipeFinderService.getUserRecipe(apiKey);
+    public List<UserRecipe> getUserRecipe(String apiKey) {
+        return recipeFinderService.getUserRecipe(apiKey);
     }
 
-    @PostMapping ("/recoverapikey")
-    public String recoverApiKey(@RequestBody Map<String, String> request){
-        return  recipeFinderService.recoverApiKey(request.get("userName"), request.get("password"));
+    @PostMapping("/recoverapikey")
+    public String recoverApiKey(@RequestBody Map<String, String> request) {
+        return recipeFinderService.recoverApiKey(request.get("userName"), request.get("password"));
     }
 
 }

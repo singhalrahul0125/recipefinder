@@ -18,13 +18,13 @@ public class SavedRecipe {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name ="RecipeName", nullable = false)
+    @Column(name = "RecipeName", nullable = false)
     private String recipeName;
 
     @Column(name = "RecipeURL", length = 1000)
     private String recipeURL;
 
-    @Column(name ="Rating", nullable = false)
+    @Column(name = "Rating", nullable = false)
     private Integer rating;
 
     @ManyToOne(fetch = FetchType.LAZY)
