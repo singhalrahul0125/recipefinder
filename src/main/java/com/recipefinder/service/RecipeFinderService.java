@@ -87,15 +87,15 @@ public class RecipeFinderService {
         List<UserAccount> userAccount = userAccountRepository.findByapiKey(apiKey);
         if (userAccount != null && userAccount.size() == 0) {
             throw new IllegalArgumentException("ApiKey doesn't exist or Invalid");
-        } else {
-            SavedRecipe savedRecipe = new SavedRecipe();
-            savedRecipe.setRating(rating);
-            savedRecipe.setRecipeName(recipeName);
-            savedRecipe.setRecipeURL(recipeURL);
-            savedRecipe.setUserAccount(userAccount.get(0));
-            savedRecipeRepository.save(savedRecipe);
-            return "Recipe Saved";
         }
+
+        SavedRecipe savedRecipe = new SavedRecipe();
+        savedRecipe.setRating(rating);
+        savedRecipe.setRecipeName(recipeName);
+        savedRecipe.setRecipeURL(recipeURL);
+        savedRecipe.setUserAccount(userAccount.get(0));
+        savedRecipeRepository.save(savedRecipe);
+        return "Recipe Saved";
     }
 
 
@@ -103,31 +103,28 @@ public class RecipeFinderService {
         List<UserAccount> userAccounts = userAccountRepository.findByapiKey(apikey);
         if (userAccounts.size() == 0) {
             throw new IllegalArgumentException("Error: apiKey not correct or doesn't exist");
-        } else {
-            List<SavedRecipe> userSavedRecipes = savedRecipeRepository.findByUserAccount(userAccounts.get(0));
-            List<UserRecipe> userRecipesList = new ArrayList<>();
-
-            for (int i = 0; i < userSavedRecipes.size(); i++) {
-
-                UserRecipe userRecipe = new UserRecipe();
-                userRecipe.setRating(userSavedRecipes.get(i).getRating());
-                userRecipe.setRecipeName(userSavedRecipes.get(i).getRecipeName());
-                userRecipe.setRecipeUrl(userSavedRecipes.get(i).getRecipeURL());
-                userRecipesList.add(userRecipe);
-            }
-            return userRecipesList;
         }
+
+        List<SavedRecipe> userSavedRecipes = savedRecipeRepository.findByUserAccount(userAccounts.get(0));
+        List<UserRecipe> userRecipesList = new ArrayList<>();
+
+        for (int i = 0; i < userSavedRecipes.size(); i++) {
+
+            UserRecipe userRecipe = new UserRecipe();
+            userRecipe.setRating(userSavedRecipes.get(i).getRating());
+            userRecipe.setRecipeName(userSavedRecipes.get(i).getRecipeName());
+            userRecipe.setRecipeUrl(userSavedRecipes.get(i).getRecipeURL());
+            userRecipesList.add(userRecipe);
+        }
+        return userRecipesList;
     }
 
     public String recoverApiKey(String userName, String password) {
         List<UserAccount> userAccounts = userAccountRepository.findByUsername(userName.toUpperCase());
 
-        if (userAccounts.size() == 0) {
-            throw new IllegalArgumentException("Invalid username or password!");
-        } else if (userAccounts.get(0).getPassword().equals(password)) {
-            return userAccounts.get(0).getApiKey();
-        } else {
+        if (userAccounts.size() == 0 || !(userAccounts.get(0).getPassword().equals(password))) {
             throw new IllegalArgumentException("Invalid username or password!");
         }
+        return userAccounts.get(0).getApiKey();
     }
 }
