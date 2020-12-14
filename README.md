@@ -158,3 +158,74 @@ curl --location --request POST 'http://localhost:8081/recipefinder/myrecipes?api
 ```
 Recipe Saved
 ```
+
+### Get saved recipes
+Returns a json list of recipes saved by the user.
+
+#### Request
+
+```
+GET http://{host}:{port}/recipefinder/myrecipes?apiKey={apiKey}
+```
+ ##### Request parameter
+
+| Parameter        | Type           | Description  |
+| :------------- |:-------------| :-----|
+| apiKey      | string | The unique key returned to user as a result of [create account](https://github.com/singhalrahul0125/recipefinder/blob/master/README.md#create-account) request.  |
+
+
+#### Sample Request and Response
+
+##### Sample Request
+```
+curl --location --request GET 'http://localhost:8081/recipefinder/myrecipes?apiKey=155730ff-316a-46d0-937b-1b755042e3e0'
+```
+
+##### Sample Response
+```
+[
+  {
+    "recipeName": "Biryani",
+    "recipeUrl": "anyurl",
+    "rating": 5
+  },
+  {
+    "recipeName": "Open-Faced Sandwich of Spinach, Caramelized Onions, and Roasted Peppers",
+    "recipeUrl": "https://ohmyveggies.com/recipe-spinach-caramelized-onion-roasted-pepper-open-faced-sandwiches/",
+    "rating": 2
+  }
+]
+```
+
+### Recover api key
+Lets users recover their unique api key by validating their username and password.
+
+#### Request
+
+```
+POST http://{host}:{port}/recipefinder/recoverapikey
+```
+ ##### Request body
+
+| Parameter        | Type           | Description  |
+| :------------- |:-------------| :-----|
+| username      | string | Username preferred by the user. Returns an error if the given username already exists.|
+| password      | string | password |
+
+
+#### Sample Request and Response
+
+##### Sample Request
+```
+curl --location --request POST 'http://localhost:8081/recipefinder/recoverapikey' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "userName" : "finaluser",
+    "password" : "mypass"
+}'
+```
+
+##### Sample Response
+```
+155730ff-316a-46d0-937b-1b755042e3e0
+```
