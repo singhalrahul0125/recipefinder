@@ -131,7 +131,7 @@ POST http://{host}:{port}/recipefinder/myrecipes?apiKey={apiKey}
 
 | Parameter        | Type           | Description  |
 | :------------- |:-------------| :-----|
-| apiKey      | string | The unique key returned to user as a result of create account request.  |
+| apiKey      | string | The unique key returned to user as a result of [create account](https://github.com/singhalrahul0125/recipefinder/blob/master/README.md#create-account) request.  |
 
 ##### Request body
 
