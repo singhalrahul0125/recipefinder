@@ -1,5 +1,5 @@
 - [Recipefinder](#recipefinder)
-  * [How to configure & install](#how-to-configure---install)
+  * [How to configure & install](#how-to-configure--install)
     + [Configuration](#configuration)
       - [Database](#database)
       - [Source API](#source-api)
