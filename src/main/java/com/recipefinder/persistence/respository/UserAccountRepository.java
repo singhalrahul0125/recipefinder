@@ -8,9 +8,6 @@ import java.util.List;
 
 @Repository
 public interface UserAccountRepository extends CrudRepository<UserAccount, Long> {
-
     List<UserAccount> findByUsername(String username);
-
     List<UserAccount> findByapiKey(String apiKey);
-
 }

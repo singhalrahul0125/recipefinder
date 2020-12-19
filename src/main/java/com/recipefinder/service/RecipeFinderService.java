@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -44,17 +45,16 @@ public class RecipeFinderService {
         SearchResponse response = responseEntity.getBody();
         List<RecipeResult> recipeResultList = new ArrayList<>();
 
-        if (response.getResults().size() == 0) {
+        if (response.getResults()==null || response.getResults().size() == 0) {
             throw new IllegalArgumentException("Recipe with this name doesn't exist");
         }
 
-        for (int i = 0; i < response.getResults().size(); i++) {
-            Result result = response.getResults().get(i);
-            RecipeResult recipeResult = new RecipeResult(result.getTitle(), result.getSourceUrl(),
-                    result.getReadyInMinutes());
-            recipeResultList.add(recipeResult);
-        }
-        return recipeResultList;
+        List<Result> responseResults = response.getResults();
+        return responseResults.stream()
+                              .map( result -> {
+                                  return new RecipeResult(result.getTitle(),
+                                                               result.getSourceUrl(), result.getReadyInMinutes());})
+                              .collect(Collectors.toList());
     }
 
     private String addApiKeyToUrl(String url, String recipeName) {
@@ -104,19 +104,18 @@ public class RecipeFinderService {
         if (userAccounts.size() == 0) {
             throw new IllegalArgumentException("Error: apiKey not correct or doesn't exist");
         }
-
         List<SavedRecipe> userSavedRecipes = savedRecipeRepository.findByUserAccount(userAccounts.get(0));
-        List<UserRecipe> userRecipesList = new ArrayList<>();
+            return userSavedRecipes.stream()
+                                    .map(this::populateUserRecipe)
+                                    .collect(Collectors.toList());
+    }
 
-        for (int i = 0; i < userSavedRecipes.size(); i++) {
-
-            UserRecipe userRecipe = new UserRecipe();
-            userRecipe.setRating(userSavedRecipes.get(i).getRating());
-            userRecipe.setRecipeName(userSavedRecipes.get(i).getRecipeName());
-            userRecipe.setRecipeUrl(userSavedRecipes.get(i).getRecipeURL());
-            userRecipesList.add(userRecipe);
-        }
-        return userRecipesList;
+    private UserRecipe populateUserRecipe(SavedRecipe recipe) {
+        UserRecipe userRecipe = new UserRecipe();
+        userRecipe.setRating(recipe.getRating());
+        userRecipe.setRecipeName(recipe.getRecipeName());
+        userRecipe.setRecipeUrl(recipe.getRecipeURL());
+        return userRecipe;
     }
 
     public String recoverApiKey(String userName, String password) {
